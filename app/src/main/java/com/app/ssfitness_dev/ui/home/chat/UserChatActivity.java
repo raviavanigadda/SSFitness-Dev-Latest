@@ -431,8 +431,7 @@ public class UserChatActivity extends AppCompatActivity {
     protected void onStart() {
 
         super.onStart();
-
-            mRootRef.child("users").child(mCurrentUser.getUid()).child("online").setValue("true");
+        mRootRef.child("users").child(mCurrentUser.getUid()).child("online").setValue("true");
 
     }
 

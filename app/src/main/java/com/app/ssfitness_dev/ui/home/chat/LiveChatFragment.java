@@ -57,6 +57,7 @@ public class LiveChatFragment extends Fragment {
 
     private View mMainView;
     private String userName;
+    String list_user_id;
 
     //options for firebase recycler
     FirebaseRecyclerOptions<Conversation> options;
@@ -111,7 +112,7 @@ public class LiveChatFragment extends Fragment {
                 = new FirebaseRecyclerAdapter<Conversation, ConversationViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ConversationViewHolder holder, int position, @NonNull Conversation model) {
-                final String list_user_id = getRef(position).getKey();
+                list_user_id = getRef(position).getKey();
 
                 Query lastMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
 
@@ -120,7 +121,7 @@ public class LiveChatFragment extends Fragment {
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Messages messages = dataSnapshot.getValue(Messages.class);
                         assert messages != null;
-                        mUsersDatabase.child(messages.getFrom()).addValueEventListener(new ValueEventListener() {
+                        mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
@@ -148,8 +149,6 @@ public class LiveChatFragment extends Fragment {
 
                         String data = dataSnapshot.child("message").getValue().toString();
 
-
-
                         holder.setMessage(data, model.isSeen());
                     }
 
@@ -173,14 +172,11 @@ public class LiveChatFragment extends Fragment {
 
                     }
                 });
-                holder.mView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent chatIntent = new Intent(getContext(), UserChatActivity.class);
-                        chatIntent.putExtra("user_name", userName);
-                        chatIntent.putExtra("user_id", list_user_id);
-                        startActivity(chatIntent);
-                    }
+                holder.mView.setOnClickListener(v -> {
+                    Intent chatIntent = new Intent(getContext(), UserChatActivity.class);
+                    chatIntent.putExtra("user_name", userName);
+                    chatIntent.putExtra("user_id", list_user_id);
+                    startActivity(chatIntent);
                 });
             }
 

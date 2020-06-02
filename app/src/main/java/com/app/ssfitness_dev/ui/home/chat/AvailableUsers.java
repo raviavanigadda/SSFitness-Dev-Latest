@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.app.ssfitness_dev.R;
 import com.app.ssfitness_dev.data.models.User;
@@ -25,8 +26,11 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -40,11 +44,13 @@ public class AvailableUsers extends Fragment {
     FirestoreRecyclerOptions<User> firestoreRecyclerOptions;
     private DatabaseReference mUsersDatabase;
     private DatabaseReference mCurrentUserDatabase;
+    private FirebaseAuth mAuth;
     private com.google.firebase.database.Query mQueryRef;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private Query mUsersRef;
     private String searchQuery;
+    String current_user_name;
 
 
     public AvailableUsers() {
@@ -67,15 +73,32 @@ public class AvailableUsers extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        mQueryRef = mUsersDatabase.orderByChild("userName").startAt(searchQuery).endAt(searchQuery + "\\uf8ff");
-        //mUsersRef = firebaseFirestore.collection("users");//.whereEqualTo("userEmail", "ravi.gamer95@gmail.com");;
 
-        mUsersRecyclerList = view.findViewById(R.id.recyclerview_users);
-        mUsersRecyclerList.setHasFixedSize(true);
-        mUsersRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mUsersDatabase.child(mAuth.getCurrentUser().getUid()).child("userName").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                current_user_name =dataSnapshot.getValue().toString();
+                Toast.makeText(getContext(), current_user_name, Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+        if(!searchQuery.equals( current_user_name)) {
+            mQueryRef = mUsersDatabase.orderByChild("userName").startAt(searchQuery).endAt(searchQuery + "\\uf8ff");
+            //mUsersRef = firebaseFirestore.collection("users");//.whereEqualTo("userEmail", "ravi.gamer95@gmail.com");;
+
+            mUsersRecyclerList = view.findViewById(R.id.recyclerview_users);
+            mUsersRecyclerList.setHasFixedSize(true);
+            mUsersRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
 
     }
 

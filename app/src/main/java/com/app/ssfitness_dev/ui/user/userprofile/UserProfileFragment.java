@@ -272,12 +272,7 @@ public class UserProfileFragment extends Fragment {
 
     private void clickListeners() {
 
-        materialToolbar.setNavigationOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                navController.navigate(R.id.action_userProfileFragment_to_dietFragment);
-            }
-        });
+        materialToolbar.setNavigationOnClickListener(view -> navController.navigate(R.id.action_userProfileFragment_to_dietFragment));
 
         maleBtn.setOnClickListener(view -> {
 
