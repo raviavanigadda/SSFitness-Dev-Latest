@@ -17,11 +17,6 @@ import com.app.ssfitness_dev.ui.home.chat.ChatFragment;
 
 public class NutritionFragment extends Fragment {
 
-    private NutritionViewModel mViewModel;
-
-    public static NutritionFragment newInstance() {
-        return new NutritionFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -32,8 +27,7 @@ public class NutritionFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = ViewModelProviders.of(this).get(NutritionViewModel.class);
-        // TODO: Use the ViewModel
+
     }
 
 

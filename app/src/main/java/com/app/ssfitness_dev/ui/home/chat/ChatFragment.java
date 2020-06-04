@@ -34,13 +34,12 @@ public class ChatFragment extends Fragment {
     private DatabaseReference mUserRef;
     private FirebaseAuth mAuth;
 
-     public  ChatFragment() {
-
-    }
+     public  ChatFragment() { }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
          return inflater.inflate(R.layout.chat_fragment, container, false);
     }
 
@@ -92,11 +91,13 @@ public class ChatFragment extends Fragment {
         public void addFragment(Fragment fragment, String title){
             fragments.add(fragment);
             fragmentTitle.add(title);
+
         }
 
         @NonNull
         @Override
         public Fragment getItem(int position) {
+
             return fragments.get(position);
         }
 

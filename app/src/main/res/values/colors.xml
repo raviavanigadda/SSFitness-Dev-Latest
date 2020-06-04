@@ -13,4 +13,15 @@
     <color name="colorRed">#E30425</color>
     <color name="colorDark">#111111</color>
     <color name="colorLightText">#929292</color>
+    <color name="greenz">#9CCC65</color>
+    <color name="red">#ef5350</color>
+    <color name="colorGrey">#3b3e47</color>
+    <color name="lightGrey">#4E5159</color>
+    <color name="colorPrimaryRipple">#F16343</color>
+    <color name="lightGreen">#2E7D32</color>
+    <color name="gold_dark">#946335</color>
+    <color name="gold_med">#ab804b</color>
+    <color name="gold">#cea774</color>
+    <color name="gold_light">#edd3b2</color>
+    <color name="mfp">#147FCC</color>
 </resources>

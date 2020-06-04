@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <data>
-        <variable
-            name="viewmodel"
-            type="com.app.ssfitness_dev.ui.home.nutrition.NutritionViewModel" />
-    </data>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -21,4 +15,3 @@
         android:text="Nutrition Fragment" />
 
 </FrameLayout>
-</layout>

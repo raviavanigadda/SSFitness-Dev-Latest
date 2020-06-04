@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menu_top">
+        <item
+            android:id="@+id/workout"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_fitness_center_black_24px"
+            android:title="Program Manager" />
+        <item
+            android:id="@+id/nutrition"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_food_apple"
+            android:title="Nutrition" />
+
+        <item
+            android:id="@+id/therapy"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_therapy"
+            android:title="Therapy" />
+        <item
+            android:id="@+id/progress"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_show_chart_black_24dp"
+            android:title="Progress" />
+    </group>
+    <group android:id="@+id/menu_bottom">
+        <item
+            android:id="@+id/FAQ"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_question_mark"
+            android:title="FAQ" />
+        <item
+            android:id="@+id/info"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="About us" />
+
+        <item
+            android:id="@+id/settings"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+        <item
+            android:id="@+id/sign_out"
+            android:fontFamily="@font/aktiv_grotesk"
+            android:icon="@drawable/ic_login_variant"
+            android:title="Sign out" />
+    </group>
+</menu>

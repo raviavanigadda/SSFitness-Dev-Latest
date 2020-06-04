@@ -6,6 +6,13 @@
             name="viewmodel"
             type="com.app.ssfitness_dev.ui.home.HomeViewModel" />
     </data>
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/drawer">
+
+
+
     <LinearLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -14,17 +21,18 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:background="@color/colorPrimaryDark"
             app:titleTextColor="@color/white"
             app:subtitleTextColor="@color/white"
-            app:menu="@menu/toolbar_menu"
+
             android:id="@+id/toolbar" />
 
         <fragment
             android:id="@+id/nav_host_fragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:name="androidx.navigation.fragment.NavHostFragment"
             app:defaultNavHost="true"
             app:navGraph="@navigation/bottom_navigation"
@@ -33,9 +41,23 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+
             android:id="@+id/bottom_nav"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_navigation_menu"/>
 
     </LinearLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/white"
+            app:headerLayout="@layout/draw_header"
+            app:itemIconTint="@color/colorPrimaryDark"
+            app:itemTextColor="@color/colorPrimary"
+            app:menu="@menu/drawermenu"/>
+
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

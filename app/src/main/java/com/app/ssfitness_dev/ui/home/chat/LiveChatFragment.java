@@ -74,6 +74,8 @@ public class LiveChatFragment extends Fragment {
         // Inflate the layout for this fragment
 
 
+
+
         mMainView = inflater.inflate(R.layout.fragment_live_chat, container, false);
         mConvList = mMainView.findViewById(R.id.conv_list);
         mAuth = FirebaseAuth.getInstance();
@@ -104,6 +106,8 @@ public class LiveChatFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+
 
         Query conversationQuery = mConvDatabase.orderByChild("timestamp");
         options = new FirebaseRecyclerOptions.Builder<Conversation>().setQuery(conversationQuery, Conversation.class).build();
@@ -197,6 +201,7 @@ public class LiveChatFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+
         if (getFragmentManager() != null) {
 
             getFragmentManager()
@@ -206,6 +211,9 @@ public class LiveChatFragment extends Fragment {
                     .commit();
         }
     }
+
+
+
 
 }
 

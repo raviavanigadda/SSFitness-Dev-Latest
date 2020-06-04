@@ -15,14 +15,6 @@
         android:name="com.app.ssfitness_dev.ui.home.chat.ChatFragment"
         android:label="Inbox" />
     <fragment
-        android:id="@+id/nutritionFragment"
-        android:name="com.app.ssfitness_dev.ui.home.nutrition.NutritionFragment"
-        android:label="Nutrition" />
-    <fragment
-        android:id="@+id/therapyFragment"
-        android:name="com.app.ssfitness_dev.ui.home.therapy.TherapyFragment"
-        android:label="Therapy" />
-    <fragment
         android:id="@+id/workoutFragment"
         android:name="com.app.ssfitness_dev.ui.home.workout.WorkoutFragment"
         android:label="Workouts" />

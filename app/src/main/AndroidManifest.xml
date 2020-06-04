@@ -14,8 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.chat.UserChatActivity"
-            android:parentActivityName=".ui.home.HomeActivity"/>
+        <activity android:name=".ui.home.nutrition.NutritionActivity"></activity>
+        <activity
+            android:name=".ui.home.chat.UserChatActivity"
+            android:parentActivityName=".ui.home.HomeActivity" />
 
         <service android:name=".ui.home.chat.FirebaseMessagingService">
             <intent-filter>
@@ -47,7 +49,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.home.HomeActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.authentication.login.LoginActivity"
             android:screenOrientation="portrait" />
