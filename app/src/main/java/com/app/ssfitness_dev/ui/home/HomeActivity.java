@@ -17,24 +17,23 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.ssfitness_dev.R;
-import com.app.ssfitness_dev.data.models.User;
 import com.app.ssfitness_dev.ui.authentication.login.LoginActivity;
 import com.app.ssfitness_dev.ui.home.nutrition.NutritionActivity;
-import com.app.ssfitness_dev.ui.home.nutrition.NutritionFragment;
 import com.app.ssfitness_dev.ui.home.profile.ProfileSettingsActivity;
-import com.app.ssfitness_dev.ui.user.userprofile.UserProfile;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,11 +46,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.app.ssfitness_dev.utilities.Constants.USER;
 
 public class HomeActivity extends AppCompatActivity implements FirebaseAuth.AuthStateListener, MenuItem.OnMenuItemClickListener {
 
@@ -66,8 +62,9 @@ public class HomeActivity extends AppCompatActivity implements FirebaseAuth.Auth
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     Dialog aboutDialog;
-    private LinearLayout view_stub;
+    private RelativeLayout view_stub;
     private static Context context;
+    Boolean mSlideState=false;
 
 
     @Override
@@ -86,12 +83,14 @@ public class HomeActivity extends AppCompatActivity implements FirebaseAuth.Auth
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         bottomNavigationView = findViewById(R.id.bottom_nav);
         mainToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mainToolbar);
 
         view_stub = findViewById(R.id.root_layout_home);
         mDrawerLayout = findViewById(R.id.drawer);
         NavigationView navigation_view = findViewById(R.id.navigation_view);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
+
 
         //Setting up drawer layout
         Menu drawerMenu = navigation_view.getMenu();
@@ -125,11 +124,25 @@ public class HomeActivity extends AppCompatActivity implements FirebaseAuth.Auth
             }
         }
         aboutDialog = new Dialog(this);
-        setSupportActionBar(mainToolbar);
+
        NavigationUI.setupWithNavController(mainToolbar, navController);
        NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
         initGoogleSignInClient();
+
+        mainToolbar.setNavigationOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!mSlideState){
+                    mDrawerLayout.openDrawer(Gravity.LEFT);
+                    mSlideState=true;
+                }
+                else {
+                    mSlideState=false;
+                    mDrawerLayout.closeDrawer(Gravity.LEFT);
+                }
+            }
+        });
     }
 
     @Override

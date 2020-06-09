@@ -3,15 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.nutrition.NutritionFragment"
-    android:background="@color/colorPrimary">
+    tools:context=".ui.home.nutrition.fragments.NutritionFragA">
 
+    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/white"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="Nutrition Fragment" />
+        android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>

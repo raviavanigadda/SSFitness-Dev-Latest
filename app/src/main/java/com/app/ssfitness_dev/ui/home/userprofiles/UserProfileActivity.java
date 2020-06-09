@@ -69,7 +69,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
         mProfileDisplayName = findViewById(R.id.profile_display_name);
         mProfileDisplayActivity = findViewById(R.id.profile_display_activity);
-        mProfileDisplayFriends = findViewById(R.id.profile_display_total_friends);
         mProfileDisplayImage = findViewById(R.id.profile_display_image);
 
         mProfileSendRequest = findViewById(R.id.profile_send_request);

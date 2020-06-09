@@ -52,7 +52,7 @@ public class BlogMindsetFragment extends Fragment implements OnBlogListItemClick
 
             //Load RecyclerView
             listView.startAnimation(fadeInAnim);
-            listProgress.startAnimation(fadeOutAnim);
+            //listProgress.startAnimation(fadeOutAnim);
 
             adapter.setBlogListModels(blogModels);
             adapter.notifyDataSetChanged();
@@ -65,7 +65,7 @@ public class BlogMindsetFragment extends Fragment implements OnBlogListItemClick
 //        navController = Navigation.findNavController(view);
 
         listView = view.findViewById(R.id.blog_mindset_list_view);
-        listProgress = view.findViewById(R.id.list_progress);
+       // listProgress = view.findViewById(R.id.list_progress);
 
         adapter = new BlogListAdapter(this);
 

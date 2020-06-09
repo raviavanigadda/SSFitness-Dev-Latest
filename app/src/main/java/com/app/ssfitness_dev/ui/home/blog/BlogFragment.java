@@ -27,18 +27,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ProgressBar;
 
 import com.app.ssfitness_dev.R;
-import com.app.ssfitness_dev.ui.home.blog.BlogListAdapter.OnBlogListItemClicked;
-import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.functions.Action;
-
-import static com.app.ssfitness_dev.utilities.Constants.TAG_GOAL_FRAGMENT;
-import static com.app.ssfitness_dev.utilities.HelperClass.logMessage;
-
 public class BlogFragment extends Fragment {
 
 

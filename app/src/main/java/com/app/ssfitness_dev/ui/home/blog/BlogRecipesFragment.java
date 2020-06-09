@@ -58,7 +58,7 @@ public class BlogRecipesFragment extends Fragment implements OnBlogListItemClick
 
             //Load RecyclerView
             listView.startAnimation(fadeInAnim);
-            listProgress.startAnimation(fadeOutAnim);
+           // listProgress.startAnimation(fadeOutAnim);
 
             adapter.setBlogListModels(blogModels);
             adapter.notifyDataSetChanged();
@@ -72,7 +72,7 @@ public class BlogRecipesFragment extends Fragment implements OnBlogListItemClick
         navController = Navigation.findNavController(view);
 
         listView = view.findViewById(R.id.blog_recipes_list_view);
-        listProgress = view.findViewById(R.id.list_progress);
+        //listProgress = view.findViewById(R.id.list_progress);
 
         adapter = new BlogListAdapter(this);
 
@@ -81,7 +81,7 @@ public class BlogRecipesFragment extends Fragment implements OnBlogListItemClick
         listView.setAdapter(adapter);
 
         fadeInAnim = AnimationUtils.loadAnimation(getContext(), R.anim.fade_in);
-        fadeOutAnim = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
+       // fadeOutAnim = AnimationUtils.loadAnimation(getContext(), R.anim.fade_out);
     }
 
     @Override

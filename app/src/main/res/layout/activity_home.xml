@@ -6,27 +6,27 @@
             name="viewmodel"
             type="com.app.ssfitness_dev.ui.home.HomeViewModel" />
     </data>
-    <androidx.drawerlayout.widget.DrawerLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/drawer">
-
-
-
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
         android:id="@+id/root_layout_home">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            app:navigationIcon="@drawable/ic_arrow_back"
             android:background="@color/colorPrimaryDark"
             app:titleTextColor="@color/white"
             app:subtitleTextColor="@color/white"
-
             android:id="@+id/toolbar" />
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/drawer"
+        android:layout_above="@id/bottom_nav"
+        android:layout_below="@id/toolbar">
 
         <fragment
             android:id="@+id/nav_host_fragment"
@@ -38,15 +38,6 @@
             app:navGraph="@navigation/bottom_navigation"
             />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:id="@+id/bottom_nav"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/bottom_navigation_menu"/>
-
-    </LinearLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view"
@@ -60,4 +51,13 @@
             app:menu="@menu/drawermenu"/>
 
     </androidx.drawerlayout.widget.DrawerLayout>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bottom_nav"
+            android:layout_alignParentBottom="true"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_navigation_menu"/>
+    </RelativeLayout>
 </layout>

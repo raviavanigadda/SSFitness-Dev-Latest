@@ -5,13 +5,15 @@
         android:icon="@drawable/ic_blog"
         android:title="Today"/>
 
-    <item android:id="@+id/chatFragment"
-        android:icon="@drawable/ic_inbox"
-        android:title="Inbox"/>
 
     <item android:id="@+id/workoutFragment"
         android:icon="@drawable/ic_workout_yoga"
         android:title="Workouts"/>
+
+    <item android:id="@+id/chatFragment"
+        android:icon="@drawable/ic_inbox"
+        android:title="Inbox"/>
+
 
     
 

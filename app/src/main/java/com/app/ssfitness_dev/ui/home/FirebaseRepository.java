@@ -44,9 +44,6 @@ public class FirebaseRepository {
         });
     }
 
-   // public void setCategory(String category){
-   //     this.category = category;
-  //  }
 
     public interface OnFirestoreTaskComplete {
         void blogListDataAdded(List<BlogModel> blogListModelsList);

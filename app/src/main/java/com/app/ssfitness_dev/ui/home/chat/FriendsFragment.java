@@ -108,56 +108,63 @@ public class FriendsFragment extends Fragment {
                 mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String userName = dataSnapshot.child("userName").getValue().toString();
-                        String userProfile = dataSnapshot.child("photoUrl").getValue().toString();
+                        if(dataSnapshot!= null){
 
-                        if (dataSnapshot.hasChild("online")) {
-                            String userOnline = dataSnapshot.child("online").getValue().toString();
-                            holder.setUserOnline(userOnline);
-                        }
+                            String userName = dataSnapshot.child("userName").getValue().toString();
+                            String userProfile = dataSnapshot.child("photoUrl").getValue().toString();
 
-
-                        holder.setName(userName);
-                        if (userProfile != null) {
-                            holder.setPhoto(userProfile, getContext());
-                        }
-
-
-                        holder.mView.setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-
-                                //Alert Dialog
-                                CharSequence options[] = new CharSequence[]
-                                        {"Open Profile", "Send Message"};
-
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-                                builder.setTitle("Select Options");
-                                builder.setItems(options, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                                        //Click event for each item
-                                        if (i == 0) {
-                                            Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
-                                            profileIntent.putExtra("user_id", list_user_id);
-                                            startActivity(profileIntent);
-                                        }
-
-                                        if (i == 1) {
-                                            Intent chatIntent = new Intent(getContext(), UserChatActivity.class);
-                                            chatIntent.putExtra("user_name", userName);
-                                            chatIntent.putExtra("user_id", list_user_id);
-                                            startActivity(chatIntent);
-                                        }
-
-                                    }
-                                });
-
-                                builder.show();
+                            if (dataSnapshot.hasChild("online")) {
+                                String userOnline = dataSnapshot.child("online").getValue().toString();
+                                holder.setUserOnline(userOnline);
                             }
-                        });
+
+
+                            holder.setName(userName);
+                            if (userProfile != null) {
+                                holder.setPhoto(userProfile, getContext());
+                            }
+
+
+                            holder.mView.setOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                    //Alert Dialog
+                                    CharSequence options[] = new CharSequence[]
+                                            {"Open Profile", "Send Message"};
+
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+                                    builder.setTitle("Select Options");
+                                    builder.setItems(options, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            //Click event for each item
+                                            if (i == 0) {
+                                                Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
+                                                profileIntent.putExtra("user_id", list_user_id);
+                                                startActivity(profileIntent);
+                                            }
+
+                                            if (i == 1) {
+                                                Intent chatIntent = new Intent(getContext(), UserChatActivity.class);
+                                                chatIntent.putExtra("user_name", userName);
+                                                chatIntent.putExtra("user_id", list_user_id);
+                                                startActivity(chatIntent);
+                                            }
+
+                                        }
+                                    });
+
+                                    builder.show();
+                                }
+                            });
+
+                        }
+
+
+
                     }
 
                     @Override

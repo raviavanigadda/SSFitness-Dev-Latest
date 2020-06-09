@@ -9,10 +9,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/topAppBarLayout">
+
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
@@ -24,10 +21,9 @@
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 />
 
-        </com.google.android.material.appbar.AppBarLayout>
 
         <TextView
-            android:layout_below="@id/topAppBarLayout"
+            android:layout_below="@id/topAppBar"
             android:id="@+id/tv_activity_question"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
@@ -39,15 +35,6 @@
             android:layout_margin="@dimen/_16sdp"
             />
 
-        <TextView
-            android:id="@+id/info"
-            android:layout_width="@dimen/_24sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:layout_below="@id/topAppBarLayout"
-            android:layout_marginTop="@dimen/_24sdp"
-            android:layout_toRightOf="@id/tv_activity_question"
-            android:layout_marginLeft="@dimen/_16sdp"
-            android:background="@drawable/ic_info" />
 
         <RadioGroup
             android:layout_width="match_parent"
