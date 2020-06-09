@@ -137,7 +137,7 @@ public class UserChatActivity extends AppCompatActivity {
         //Custom Action bar item
         mTitleView = findViewById(R.id.custom_bar_title);
         mLastSeenView = findViewById(R.id.custom_bar_seen);
-       // mProfileImage = findViewById(R.id.custom_bar_image);
+        // mProfileImage = findViewById(R.id.custom_bar_image);
         //mChatAdd = findViewById(R.id.chat_add);
         mChatSend = findViewById(R.id.chat_send);
         mChatMessage = findViewById(R.id.chat_edit_text);
@@ -257,7 +257,7 @@ public class UserChatActivity extends AppCompatActivity {
             public void onRefresh() {
                 mCurrentPage++;
 
-               // messagesList.clear();
+                // messagesList.clear();
 
                 itemPos = 0;
 
@@ -339,53 +339,53 @@ public class UserChatActivity extends AppCompatActivity {
 
         //retrieve the data, coz we need to work with child remove
         messageQuery.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        //Once we get all messages we receive it as data snapshow
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                //Once we get all messages we receive it as data snapshow
 
-                        Messages messages = dataSnapshot.getValue(Messages.class);
+                Messages messages = dataSnapshot.getValue(Messages.class);
 
 
-                        //add new message id to db
-                        itemPos++;
+                //add new message id to db
+                itemPos++;
 
-                        if(itemPos == 1){
-                            String messageKey = dataSnapshot.getKey();
+                if(itemPos == 1){
+                    String messageKey = dataSnapshot.getKey();
 
-                            mLastKey = messageKey;
-                            mPrevKey = messageKey;
-                        }
+                    mLastKey = messageKey;
+                    mPrevKey = messageKey;
+                }
 
-                        messagesList.add(messages);
+                messagesList.add(messages);
 
-                        mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
 
-                        //bottom of recycler view
-                        mMessagesList.scrollToPosition(messagesList.size() -1);
+                //bottom of recycler view
+                mMessagesList.scrollToPosition(messagesList.size() -1);
 
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
 
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    }
+            }
 
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                    }
+            }
 
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        });
 
     }
 

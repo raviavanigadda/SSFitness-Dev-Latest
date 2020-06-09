@@ -11,6 +11,14 @@ import java.util.Date;
 @IgnoreExtraProperties
 public class User implements Serializable {
 
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
     public String userID;
     public String userName;
     public String userEmail;

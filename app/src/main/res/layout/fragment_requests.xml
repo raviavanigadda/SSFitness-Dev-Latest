@@ -1,13 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.chat.RequestsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.home.chat.RequestsFragment"
+    android:orientation="vertical"
+    android:weightSum="2">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_requests"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/request_received_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your Got Friend Requests From"
+            android:textColor="@color/black"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_8sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center" />
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_received_requests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/request_received_txt"
+            android:layout_margin="@dimen/_8sdp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/request_sent_txt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your Have Sent Friend Requests To"
+            android:textColor="@color/black"
+            android:textStyle="bold|italic"
+            android:textSize="@dimen/_16ssp"
+            android:padding="@dimen/_8sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_sent_requests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/request_sent_txt"
+            android:layout_margin="@dimen/_8sdp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

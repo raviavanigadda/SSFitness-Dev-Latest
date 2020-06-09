@@ -35,12 +35,12 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         //Whenever a message is received, its gonna do something
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this,CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_app_icon)
-                .setContentTitle(notificationTitle)
-                .setContentText(notificationMessage)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+                        .setSmallIcon(R.drawable.ic_app_icon)
+                        .setContentTitle(notificationTitle)
+                        .setContentText(notificationMessage)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true);
 
         createNotificationChannel();
 
@@ -50,14 +50,14 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
     private void createNotificationChannel() {
-         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Friend Requests";
             String description = "You have some friend requests"; //getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
-             NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
     }

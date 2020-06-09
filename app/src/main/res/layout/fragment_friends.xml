@@ -24,7 +24,6 @@
         android:layout_below="@id/text_view_search"
         android:layout_alignParentStart="true"
         android:layout_marginStart="32dp"
-        android:singleLine="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="55dp"
         android:background="@drawable/border"

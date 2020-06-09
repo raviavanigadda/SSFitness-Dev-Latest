@@ -62,7 +62,7 @@ public class LiveChatFragment extends Fragment {
     //options for firebase recycler
     FirebaseRecyclerOptions<Conversation> options;
 
- //
+    //
     public LiveChatFragment() {
         // Required empty public constructor
     }
@@ -72,8 +72,6 @@ public class LiveChatFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
-
 
 
         mMainView = inflater.inflate(R.layout.fragment_live_chat, container, false);
@@ -106,8 +104,6 @@ public class LiveChatFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-
 
         Query conversationQuery = mConvDatabase.orderByChild("timestamp");
         options = new FirebaseRecyclerOptions.Builder<Conversation>().setQuery(conversationQuery, Conversation.class).build();
@@ -201,7 +197,6 @@ public class LiveChatFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-
         if (getFragmentManager() != null) {
 
             getFragmentManager()
@@ -211,9 +206,6 @@ public class LiveChatFragment extends Fragment {
                     .commit();
         }
     }
-
-
-
 
 }
 

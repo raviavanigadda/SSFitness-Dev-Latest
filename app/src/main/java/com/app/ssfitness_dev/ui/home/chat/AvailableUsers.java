@@ -1,5 +1,6 @@
 package com.app.ssfitness_dev.ui.home.chat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,6 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,6 +37,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -46,12 +51,13 @@ public class AvailableUsers extends Fragment {
     private DatabaseReference mCurrentUserDatabase;
     private FirebaseAuth mAuth;
     private com.google.firebase.database.Query mQueryRef;
+    private ArrayList<User> userArrayList;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private Query mUsersRef;
-    private String searchQuery;
+    private String searchQuery="";
     String current_user_name;
-
+    UserRecAdapter userRecAdapter;
 
     public AvailableUsers() {
         // Required empty public constructor
@@ -77,28 +83,12 @@ public class AvailableUsers extends Fragment {
 
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
 
-        mUsersDatabase.child(mAuth.getCurrentUser().getUid()).child("userName").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                current_user_name =dataSnapshot.getValue().toString();
-                Toast.makeText(getContext(), current_user_name, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
-        if(!searchQuery.equals( current_user_name)) {
-            mQueryRef = mUsersDatabase.orderByChild("userName").startAt(searchQuery).endAt(searchQuery + "\\uf8ff");
-            //mUsersRef = firebaseFirestore.collection("users");//.whereEqualTo("userEmail", "ravi.gamer95@gmail.com");;
-
-            mUsersRecyclerList = view.findViewById(R.id.recyclerview_users);
-            mUsersRecyclerList.setHasFixedSize(true);
-            mUsersRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
-        }
+        mUsersRecyclerList = view.findViewById(R.id.recyclerview_users);
+        mUsersRecyclerList.setHasFixedSize(true);
+        mUsersRecyclerList.setLayoutManager(new LinearLayoutManager(getContext()));
+        userArrayList = new ArrayList<User>();
+        userRecAdapter = new UserRecAdapter(userArrayList,getContext());
+        mUsersRecyclerList.setAdapter(userRecAdapter);
 
     }
 
@@ -106,7 +96,7 @@ public class AvailableUsers extends Fragment {
     public void onStart() {
         super.onStart();
 
-/*
+        /*
         firestoreRecyclerOptions = new FirestoreRecyclerOptions.Builder<User>().setQuery(mUsersRef, User.class).build();
         FirestoreRecyclerAdapter<User, UsersViewHolder> firestoreRecyclerAdapter = new FirestoreRecyclerAdapter<User, UsersViewHolder>(firestoreRecyclerOptions) {
             @Override
@@ -126,30 +116,80 @@ public class AvailableUsers extends Fragment {
 
         firestoreRecyclerAdapter.startListening();
         mUsersRecyclerList.setAdapter(firestoreRecyclerAdapter);
- */
+    */
 
-        options = new FirebaseRecyclerOptions.Builder<User>().setQuery(mQueryRef,User.class).build();
+        /*mUsersDatabase.child(mAuth.getCurrentUser().getUid()).child("userName").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                current_user_name =dataSnapshot.getValue().toString();
+                if(!searchQuery.equals( current_user_name)) {
+                    mQueryRef = mUsersDatabase.orderByChild("userName").startAt(searchQuery).endAt(searchQuery + "\\uf8ff");
+                    //mUsersRef = firebaseFirestore.collection("users");//.whereEqualTo("userEmail", "ravi.gamer95@gmail.com");;
+                }
+            }
 
-        FirebaseRecyclerAdapter<User, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, UsersViewHolder>(
-                options
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        ) {
+            }
+        });*/
+
+        getSearchResults();
+    }
+
+    private void getSearchResults(){
+        if(!searchQuery.equals("")) {
+
+            if(searchQuery.contains(" ")){
+                String[] search_array = searchQuery.split(" ");
+                String firstName = search_array[0].substring(0,1).toUpperCase()+search_array[0].substring(1).toLowerCase();
+                String lastName = search_array[1].substring(0,1).toUpperCase()+search_array[1].substring(1).toLowerCase();
+                searchQuery = firstName+" "+lastName;
+            }
+            else {
+                searchQuery = searchQuery.substring(0,1).toUpperCase()+searchQuery.substring(1).toLowerCase();
+            }
+            //Toast.makeText(getContext(),searchQuery,Toast.LENGTH_LONG).show();
+            mUsersDatabase.orderByChild("userName").startAt(searchQuery).endAt(searchQuery+"\uf8ff").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    userArrayList.clear();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                        if (!ds.getKey().equals(mAuth.getCurrentUser().getUid())) {
+                            User user = ds.getValue(User.class);
+                            userArrayList.add(user);
+                        }
+                    }
+                    userRecAdapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        /*options = new FirebaseRecyclerOptions.Builder<User>().setQuery(mUsersDatabase,User.class).build();
+
+        FirebaseRecyclerAdapter<User, UsersViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<User, UsersViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull UsersViewHolder holder, int position, @NonNull User model) {
 
-                    holder.setDetails(model.getUserName(), model.getActivitylevel(), model.getPhotoUrl());
-                    String userID;
+                holder.setDetails(model.getUserName(), model.getActivitylevel(), model.getPhotoUrl());
+                String userID;
 
-                    userID = getRef(position).getKey();
+                userID = getRef(position).getKey();
 
-                    holder.mView.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
-                            profileIntent.putExtra("user_id", userID);
-                            startActivity(profileIntent);
-                        }
-                    });
+                holder.mView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
+                        profileIntent.putExtra("user_id", userID);
+                        startActivity(profileIntent);
+                    }
+                });
 
 
             }
@@ -165,35 +205,82 @@ public class AvailableUsers extends Fragment {
         };
 
         firebaseRecyclerAdapter.startListening();
-        mUsersRecyclerList.setAdapter(firebaseRecyclerAdapter);
+        mUsersRecyclerList.setAdapter(firebaseRecyclerAdapter);*/
     }
 
 
     //Adapter
-    public static class UsersViewHolder extends RecyclerView.ViewHolder {
 
-        View mView;
-        public UsersViewHolder(@NonNull View itemView) {
-            super(itemView);
-            mView = itemView;
+    public class UserRecAdapter extends RecyclerView.Adapter<UserRecAdapter.UsersViewHolder>  {
+
+        private ArrayList<User> UserArrayList;
+        private Context context;
+        private View.OnClickListener UserListener;
+
+        public UserRecAdapter(ArrayList<User> UserArrayList, Context context) {
+            this.UserArrayList = UserArrayList;
+            this.context = context;
         }
 
+        @NonNull
+        @Override
+        public UsersViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        public void setDetails(String userName, String userActivity, String userProfileUrl) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.users_search_single_item,parent,false);
 
-            TextView userNameView = mView.findViewById(R.id.user_single_name);
-            TextView userActivityView = mView.findViewById(R.id.user_single_activity_level);
-            ImageView userProfileView = mView.findViewById(R.id.user_single_profile);
+            return new UsersViewHolder(view);
+        }
 
-            userNameView.setText(userName);
-            userActivityView.setText(userActivity);
-
-            if(userProfileUrl!=null){
-                Glide.with(mView.getContext()).load(userProfileUrl).into(userProfileView);
+        @Override
+        public void onBindViewHolder(@NonNull UsersViewHolder holder, int position) {
+            holder.userNameView.setText(UserArrayList.get(position).getUserName());
+            holder.userActivityView.setText(UserArrayList.get(position).getActivitylevel());
+            if(!UserArrayList.get(position).getPhotoUrl().equals("")){
+                Glide.with(context).load(UserArrayList.get(position).getPhotoUrl()).into(holder.userProfileView);
             }
 
 
+            String userID = UserArrayList.get(position).getUserID();
+            holder.itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
+                    profileIntent.putExtra("user_id", userID);
+                    startActivity(profileIntent);
+                }
+            });
+
+
         }
+
+        public void setOnClickListener(View.OnClickListener clickListener){
+            UserListener = clickListener;
+        }
+
+        @Override
+        public int getItemCount() {
+            return UserArrayList.size();
+        }
+
+        public class UsersViewHolder extends RecyclerView.ViewHolder{
+
+            TextView userNameView, userActivityView;
+            ImageView userProfileView;
+
+            public UsersViewHolder(@NonNull View itemView) {
+                super(itemView);
+                userNameView = itemView.findViewById(R.id.user_single_name);
+                userActivityView = itemView.findViewById(R.id.user_single_activity_level);
+                userProfileView = itemView.findViewById(R.id.user_single_profile);
+
+                itemView.setTag(this);
+
+                itemView.setOnClickListener(UserListener);
+
+            }
+        }
+
+
     }
 
 }

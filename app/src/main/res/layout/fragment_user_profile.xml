@@ -140,20 +140,20 @@
             android:id="@+id/btn_female"
             android:layout_toRightOf="@id/btn_male"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:padding="@dimen/_12sdp"
-                android:background="@drawable/outline_btn_bg"
-                android:textColor="@color/white"
-                android:id="@+id/user_dob"
-                style="@android:style/Widget.EditText"
-                android:layout_marginStart="@dimen/_42sdp"
-                android:layout_marginEnd="@dimen/_42sdp"
-                android:layout_below="@id/btn_male"
-                android:text="Date of birth"
-                />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:padding="@dimen/_12sdp"
+            android:background="@drawable/outline_btn_bg"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp"
+            android:id="@+id/user_dob"
+            android:layout_marginStart="@dimen/_42sdp"
+            android:layout_marginEnd="@dimen/_42sdp"
+            android:layout_below="@id/btn_male"
+            android:text="Date of birth"
+            />
 
 
         <com.google.android.material.textfield.TextInputLayout
@@ -182,8 +182,8 @@
                 android:id="@+id/dropdown_country_text"
                 android:textColor="@color/white"
                 android:hint="Country"
+                android:textSize="@dimen/_14ssp"
                 android:background="@drawable/outline_btn_bg"
-
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -195,18 +195,18 @@
             android:layout_below="@id/layout_country"
             android:id="@+id/linear_bmi">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.5"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:id="@+id/user_height"
-                    android:text="Height"
-                    android:layout_marginLeft="@dimen/_16sdp"
-                    android:layout_marginRight="@dimen/_16sdp"
-                    android:padding="@dimen/_16sdp"
-                    android:background="@drawable/bottom_border"
-                    />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:id="@+id/user_height"
+                android:text="Height"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:padding="@dimen/_16sdp"
+                android:background="@drawable/bottom_border"
+                />
 
             <TextView
                 android:layout_width="0dp"

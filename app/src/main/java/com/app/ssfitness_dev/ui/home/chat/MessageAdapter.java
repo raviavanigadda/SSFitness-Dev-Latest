@@ -65,18 +65,18 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         String from_user = c.getFrom();
 
-       if(from_user.equals(current_user_id)){
+        if(from_user.equals(current_user_id)){
 
-           holder.messageText.setTextColor(Color.WHITE);
-           holder.messageText.setBackgroundResource(R.drawable.background_chat_bubble);
+            holder.messageText.setTextColor(Color.WHITE);
+            holder.messageText.setBackgroundResource(R.drawable.background_chat_bubble);
             holder.messageText.setGravity(Gravity.RIGHT);
-       }
-       else {
+        }
+        else {
 
-           holder.messageText.setBackgroundColor(Color.WHITE);
-           holder.messageText.setTextColor(Color.BLACK);
-           holder.messageText.setGravity(Gravity.LEFT);
-       }
+            holder.messageText.setBackgroundColor(Color.WHITE);
+            holder.messageText.setTextColor(Color.BLACK);
+            holder.messageText.setGravity(Gravity.LEFT);
+        }
 
         holder.messageText.setText(c.getMessage());
     }
