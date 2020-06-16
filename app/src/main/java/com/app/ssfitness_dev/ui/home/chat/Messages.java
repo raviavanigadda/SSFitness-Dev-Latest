@@ -5,6 +5,7 @@ public class Messages {
     private String message, type, from;
     private long time;
     private boolean seen;
+    private String UserName;
 
     public Messages(String from) {
         this.from = from;
@@ -60,5 +61,13 @@ public class Messages {
         this.seen = seen;
         this.time = time;
         this.type = type;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
     }
 }

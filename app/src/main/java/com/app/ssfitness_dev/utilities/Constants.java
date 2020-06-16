@@ -28,6 +28,7 @@ public interface Constants {
     String TAG_FINISH_PROFILE_FRAGMENT = "Finish Profile Details Fragment";
     String TAG_GOAL_FRAGMENT = "Goal Fragment";
     String TAG_USER_PROFILE_FRAGMENT = "User Fragment";
+    String TAG_GROUP_PROFILE_FRAGMENT = "Group Fragment";
     String TAG_USER_PROFILE = "User Profile Activity";
 
     int RC_SIGN_IN = 123;

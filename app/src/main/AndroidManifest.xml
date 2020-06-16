@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.home.nutrition.NutritionActivity"></activity>
+        <activity android:name=".ui.home.chat.CreateGroupActivity"></activity>
+        <activity android:name=".ui.home.nutrition.NutritionActivity" />
         <activity
             android:name=".ui.home.chat.UserChatActivity"
             android:parentActivityName=".ui.home.HomeActivity" />

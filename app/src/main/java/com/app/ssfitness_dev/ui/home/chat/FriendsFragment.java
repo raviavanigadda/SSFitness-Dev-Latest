@@ -28,8 +28,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.ssfitness_dev.R;
-import com.app.ssfitness_dev.data.models.User;
-
+//import com.app.ssfitness_dev.ui.home.chat.AvailableUsers.UsersViewHolder;
 import com.app.ssfitness_dev.ui.home.userprofiles.UserProfileActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;

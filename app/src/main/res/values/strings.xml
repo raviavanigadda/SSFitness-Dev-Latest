@@ -3,4 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="grop_name_hint">Group Name</string>
+    <string name="cg_select_members">SELECT GROUP MEMBERS</string>
+    <string name="cg_edit_text_err">Please enter group name</string>
+
 </resources>

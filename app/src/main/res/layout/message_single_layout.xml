@@ -1,27 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/_8sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/message_single_layout"
-    >
+    android:padding="@dimen/_8sdp">
 
-   <!-- <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="@dimen/_56sdp"
-        android:background="@drawable/ic_account"
-        android:id="@+id/message_profile_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messages_date_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/_8sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/messages_date_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:backgroundTint="@color/colorAccent"
+            app:cardCornerRadius="@dimen/_8sdp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="date"
+                android:id="@+id/messages_date_txt_view"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                android:padding="@dimen/_8sdp" />
+
+        </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sender_message_cv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/messages_date_layout"
         android:backgroundTint="@color/colorPrimary"
-        android:layout_height="@dimen/_56sdp"/> -->
+        app:cardCornerRadius="@dimen/_16sdp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Message"
+            android:id="@+id/sent_msg_text_view"
+            android:textSize="@dimen/_14ssp"
+            android:paddingStart="@dimen/_16sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:textColor="@color/white"
+            android:gravity="end"
+            android:visibility="visible"/>
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/sender_sent_time"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Message"
+        app:layout_constraintEnd_toEndOf="@id/sender_message_cv"
+        app:layout_constraintTop_toBottomOf="@id/sender_message_cv"
+        android:paddingTop="@dimen/_4sdp"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="sent_time"
+        android:gravity="end"
+        android:visibility="gone"/>
 
-        android:id="@+id/message_text_layout"
-        android:textSize="@dimen/_14ssp"
-        android:padding="@dimen/_14sdp"
-        android:layout_centerVertical="true"/>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/receiver_message_cv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sender_sent_time"
+        android:backgroundTint="@color/gray"
+        app:cardCornerRadius="@dimen/_16sdp"
+        android:visibility="visible">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/received_from_bg_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/received_from_text_view"
+                app:layout_constraintBottom_toBottomOf="@id/received_from_text_view"
+                android:background="@color/lightGray"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/received_from_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="@dimen/_8sdp"
+                android:paddingStart="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_8sdp"
+                android:textSize="@dimen/_12ssp"
+                android:text="User Name"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:maxLines="1"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Message"
+                android:id="@+id/received_msg_text_view"
+                android:textSize="@dimen/_14ssp"
+                android:paddingStart="@dimen/_8sdp"
+                android:paddingEnd="@dimen/_16sdp"
+                android:paddingTop="@dimen/_8sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:textColor="@color/colorPrimaryDark"
+                android:gravity="start"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/received_from_text_view"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/receiver_sent_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/receiver_message_cv"
+        app:layout_constraintTop_toBottomOf="@id/receiver_message_cv"
+        android:paddingTop="@dimen/_4sdp"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="sent_time"
+        android:gravity="start"
+        android:visibility="gone"/>
 
 
-</RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

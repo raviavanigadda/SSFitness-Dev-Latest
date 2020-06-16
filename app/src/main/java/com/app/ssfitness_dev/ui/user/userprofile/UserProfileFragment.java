@@ -140,7 +140,7 @@ public class UserProfileFragment extends Fragment {
         clickListeners();
 
 
-       // continueToCongrats.setOnClickListener(view1 -> navController.navigate(R.id.action_userProfileFragment_to_finishProfileDetailsFragment));
+        // continueToCongrats.setOnClickListener(view1 -> navController.navigate(R.id.action_userProfileFragment_to_finishProfileDetailsFragment));
 
         continueToCongrats.setOnClickListener(new OnClickListener() {
             @Override
@@ -182,7 +182,9 @@ public class UserProfileFragment extends Fragment {
                     //Firestore
                     DocumentReference uidRef = usersRef.document(currentUid);
 
-                    name = firstName.getText().toString() +" "+lastName.getText().toString();
+                    String userFirstName = firstName.getText().toString().trim().substring(0,1).toUpperCase()+firstName.getText().toString().trim().substring(1).toLowerCase();
+                    String userLastName = lastName.getText().toString().trim().substring(0,1).toUpperCase()+lastName.getText().toString().trim().substring(1).toLowerCase();
+                    name = userFirstName+" "+userLastName;
                     country = countryAutoCompleteDropText.getText().toString();
                     bmi = weight*10000/(height*height);
 
@@ -224,7 +226,7 @@ public class UserProfileFragment extends Fragment {
                         });
 
                         uploadTask.addOnSuccessListener(taskSnapshot -> {
-                               if (taskSnapshot.getMetadata() != null) {
+                            if (taskSnapshot.getMetadata() != null) {
                                 if (taskSnapshot.getMetadata().getReference() != null) {
                                     Task<Uri> result = taskSnapshot.getStorage().getDownloadUrl();
                                     result.addOnSuccessListener(uri -> {
@@ -253,16 +255,16 @@ public class UserProfileFragment extends Fragment {
                         mUserDatabase.updateChildren(user);
 
                         uidRef.update(user)
-                         .addOnCompleteListener(task -> {
+                                .addOnCompleteListener(task -> {
                                     if(task.isSuccessful()){
                                         logMessage(TAG_GOAL_FRAGMENT, "User profile is saved successfully");
                                         navController.navigate(R.id.action_userProfileFragment_to_finishProfileDetailsFragment);
                                     }
                                 })
-                         .addOnFailureListener(e -> {
-                            Toast.makeText(getContext(), "Server timeout. Please try again later.", Toast.LENGTH_SHORT).show();
-                            logMessage(TAG_GOAL_FRAGMENT, e.getMessage());
-                        });
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(getContext(), "Server timeout. Please try again later.", Toast.LENGTH_SHORT).show();
+                                    logMessage(TAG_GOAL_FRAGMENT, e.getMessage());
+                                });
                     }
 
                 }
@@ -272,8 +274,9 @@ public class UserProfileFragment extends Fragment {
 
     private void clickListeners() {
 
-        materialToolbar.setNavigationOnClickListener(view -> navController.navigate(R.id.action_userProfileFragment_to_dietFragment));
+//        materialToolbar.setNavigationOnClickListener(view -> navController.navigate(R.id.action_userProfileFragment_to_dietFragment));
 
+        materialToolbar.setVisibility(View.GONE);
         maleBtn.setOnClickListener(view -> {
 
             if (VERSION.SDK_INT >= VERSION_CODES.M) {
@@ -296,7 +299,11 @@ public class UserProfileFragment extends Fragment {
             gender = "female";
         });
 
-        dateOfBirth.setOnClickListener(view -> materialDatePicker.show(getActivity().getSupportFragmentManager(),"DATE_PICKER" ));
+
+        dateOfBirth.setOnClickListener(view -> {
+            if(!materialDatePicker.isAdded())
+                materialDatePicker.show(getActivity().getSupportFragmentManager(),"DATE_PICKER");
+        });
 
         materialDatePicker.addOnPositiveButtonClickListener(selection -> {
             dateOfBirth.setText(materialDatePicker.getHeaderText());
@@ -370,15 +377,15 @@ public class UserProfileFragment extends Fragment {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                   if(et_in.getText().toString().equals("")){
-                       return;
-                   }
+                    if(et_in.getText().toString().equals("")){
+                        return;
+                    }
                     int inches = Integer.parseInt(et_in.getText().toString());
 
-                       if(inches<1 || inches >11)
-                       {
-                           et_in.setError("Enter valid height");
-                       }
+                    if(inches<1 || inches >11)
+                    {
+                        et_in.setError("Enter valid height");
+                    }
 
                 }
 
@@ -397,9 +404,9 @@ public class UserProfileFragment extends Fragment {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                   if(et_cm.getText().toString().equals("")){
-                       return;
-                   }
+                    if(et_cm.getText().toString().equals("")){
+                        return;
+                    }
                     int cm = Integer.parseInt(et_cm.getText().toString());
 
                     if(cm>255 || cm < 89)
@@ -443,158 +450,35 @@ public class UserProfileFragment extends Fragment {
                 }
             });
 
-           set.setOnClickListener(view12 -> {
-               if(!TextUtils.isEmpty(et_ft.getText())
-                       &&!TextUtils.isEmpty(et_in.getText())){
+            set.setOnClickListener(view12 -> {
+                if(!TextUtils.isEmpty(et_ft.getText())
+                        &&!TextUtils.isEmpty(et_in.getText())){
 
-                   double cm1 = (Integer.parseInt(et_in.getText().toString())*2.54);
-                   double cm2 = (Integer.parseInt(et_ft.getText().toString())*30.48);
-                   double totalCm = cm1 + cm2;
-                   height = (int)totalCm;
-               }
+                    double cm1 = (Integer.parseInt(et_in.getText().toString())*2.54);
+                    double cm2 = (Integer.parseInt(et_ft.getText().toString())*30.48);
+                    double totalCm = cm1 + cm2;
+                    height = (int)totalCm;
+                }
 
-               if(height >= 256)
-               {
-                   height = 254;
-               }
-               else if (height<89)
-               {
-                   height = 89;
-               }
+                if(height >= 256)
+                {
+                    height = 254;
+                }
+                else if (height<89)
+                {
+                    height = 89;
+                }
 
-               tv_height.setText(height+"");
-               myAlertdialog.dismiss();
-           });
+                tv_height.setText(height+"");
+                myAlertdialog.dismiss();
+                showWeightDialog(view);
+            });
 
             dismiss.setOnClickListener(view1 -> myAlertdialog.dismiss());
 
         });
 
-        tv_weight.setOnClickListener(view -> {
-            AlertDialog myAlertdialog;
-            Switch weightSwitch;
-            EditText et_kgs, et_lbs;
-            TextView tv_kgs, tv_lbs;
-
-            View mDialogView = LayoutInflater.from(view.getContext())
-                    .inflate(R.layout.alertdialog_weight, null);
-
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(view.getContext());
-            builder.setTitle("Weight")
-                    .setView(mDialogView)
-                    .setIcon(R.drawable.ic_height)
-                    .setCancelable(true)
-                    .setBackground(view.getResources().getDrawable(R.drawable.alert_dialog_bg))
-                    .setMessage("Enter your weight. Use the switch if you want to change the units.");
-
-            myAlertdialog = builder.create();
-            myAlertdialog.show();
-
-            Button set = mDialogView.findViewById(R.id.btn_weight_set);
-            Button dismiss = mDialogView.findViewById(R.id.btn_weight_dismiss);
-            et_kgs = mDialogView.findViewById(R.id.et_kg);
-            et_lbs = mDialogView.findViewById(R.id.et_lb);
-
-            tv_kgs = mDialogView.findViewById(R.id.tv_kg);
-            tv_lbs = mDialogView.findViewById(R.id.tv_lb);
-
-            weightSwitch = mDialogView.findViewById(R.id.switchWeight);
-
-            weightSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    if(isChecked){
-                        et_kgs.setVisibility(View.GONE);
-                        tv_kgs.setVisibility(View.GONE);
-
-                        et_lbs.setVisibility(View.VISIBLE);
-                        tv_lbs.setVisibility(View.VISIBLE);
-                    }
-                    else {
-                        et_kgs.setVisibility(View.VISIBLE);
-                        tv_kgs.setVisibility(View.VISIBLE);
-
-                        et_lbs.setVisibility(View.GONE);
-                        tv_lbs.setVisibility(View.GONE);
-                    }
-                }
-            });
-
-            et_kgs.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    if(et_kgs.getText().toString().equals("")){
-                        return;
-                    } else if(Integer.parseInt(et_kgs.getText().toString()) < 20
-                            || Integer.parseInt(et_kgs.getText().toString()) > 452) {
-                        et_kgs.setError("Enter valid weight");
-                    }else {
-                        weight = Integer.parseInt(et_kgs.getText().toString());
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-
-            et_lbs.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if(et_lbs.getText().toString().equals("")){
-                        return;
-                    } else if(Integer.parseInt(et_lbs.getText().toString()) < 44
-                            || Integer.parseInt(et_lbs.getText().toString()) > 996)
-                    {
-                        et_lbs.setError("Enter valid weight");
-                    }
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-
-            set.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if(!TextUtils.isEmpty(et_lbs.getText()))
-                    {
-                        double lbgToKgs = (Integer.parseInt(et_lbs.getText().toString())/2.205);
-                        weight = (int)lbgToKgs;
-                    }
-
-                    if(weight > 452)
-                    {
-                        weight = 452;
-                    }
-                    else if (weight<20)
-                    {
-                        weight = 20;
-                    }
-                    tv_weight.setText(weight+"");
-                    myAlertdialog.dismiss();
-                     }
-            });
-
-
-            dismiss.setOnClickListener(view1 -> myAlertdialog.dismiss());
-        });
+        tv_weight.setOnClickListener(view -> showWeightDialog(view));
 
         mProfileImage.setOnClickListener(view -> {
 
@@ -608,6 +492,132 @@ public class UserProfileFragment extends Fragment {
         });
 
 
+    }
+
+    private void showWeightDialog(View view){
+        AlertDialog myAlertdialog;
+        Switch weightSwitch;
+        EditText et_kgs, et_lbs;
+        TextView tv_kgs, tv_lbs;
+
+        View mDialogView = LayoutInflater.from(view.getContext())
+                .inflate(R.layout.alertdialog_weight, null);
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(view.getContext());
+        builder.setTitle("Weight")
+                .setView(mDialogView)
+                .setIcon(R.drawable.ic_height)
+                .setCancelable(true)
+                .setBackground(view.getResources().getDrawable(R.drawable.alert_dialog_bg))
+                .setMessage("Enter your weight. Use the switch if you want to change the units.");
+
+        myAlertdialog = builder.create();
+        myAlertdialog.show();
+
+        Button set = mDialogView.findViewById(R.id.btn_weight_set);
+        Button dismiss = mDialogView.findViewById(R.id.btn_weight_dismiss);
+        et_kgs = mDialogView.findViewById(R.id.et_kg);
+        et_lbs = mDialogView.findViewById(R.id.et_lb);
+
+        tv_kgs = mDialogView.findViewById(R.id.tv_kg);
+        tv_lbs = mDialogView.findViewById(R.id.tv_lb);
+
+        weightSwitch = mDialogView.findViewById(R.id.switchWeight);
+
+        weightSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked){
+                    et_kgs.setVisibility(View.GONE);
+                    tv_kgs.setVisibility(View.GONE);
+
+                    et_lbs.setVisibility(View.VISIBLE);
+                    tv_lbs.setVisibility(View.VISIBLE);
+                }
+                else {
+                    et_kgs.setVisibility(View.VISIBLE);
+                    tv_kgs.setVisibility(View.VISIBLE);
+
+                    et_lbs.setVisibility(View.GONE);
+                    tv_lbs.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        et_kgs.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if(et_kgs.getText().toString().equals("")){
+                    return;
+                } else if(Integer.parseInt(et_kgs.getText().toString()) < 20
+                        || Integer.parseInt(et_kgs.getText().toString()) > 452) {
+                    et_kgs.setError("Enter valid weight");
+                }else {
+                    weight = Integer.parseInt(et_kgs.getText().toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        et_lbs.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(et_lbs.getText().toString().equals("")){
+                    return;
+                } else if(Integer.parseInt(et_lbs.getText().toString()) < 44
+                        || Integer.parseInt(et_lbs.getText().toString()) > 996)
+                {
+                    et_lbs.setError("Enter valid weight");
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        set.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!TextUtils.isEmpty(et_lbs.getText()))
+                {
+                    double lbgToKgs = (Integer.parseInt(et_lbs.getText().toString())/2.205);
+                    weight = (int)lbgToKgs;
+                }
+
+                if(weight > 452)
+                {
+                    weight = 452;
+                }
+                else if (weight<20)
+                {
+                    weight = 20;
+                }
+                tv_weight.setText(weight+"");
+                myAlertdialog.dismiss();
+            }
+        });
+
+
+        dismiss.setOnClickListener(view1 -> myAlertdialog.dismiss());
     }
 
     @Override
@@ -629,7 +639,7 @@ public class UserProfileFragment extends Fragment {
                 Uri mResultUri = result.getUri();
                 resultUri = mResultUri;
                 mProfileImage.setImageURI(resultUri);
-               } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
@@ -730,3 +740,4 @@ public class UserProfileFragment extends Fragment {
     }
 
 }
+

@@ -162,6 +162,18 @@ public class AvailableUsers extends Fragment {
                         }
                     }
                     userRecAdapter.notifyDataSetChanged();
+                    userRecAdapter.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+                            int position = viewHolder.getAdapterPosition();
+
+                            Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
+                            profileIntent.putExtra("user_id", userArrayList.get(position).userID);
+                            startActivity(profileIntent);
+                        }
+                    });
 
                 }
 
@@ -238,19 +250,6 @@ public class AvailableUsers extends Fragment {
             if(!UserArrayList.get(position).getPhotoUrl().equals("")){
                 Glide.with(context).load(UserArrayList.get(position).getPhotoUrl()).into(holder.userProfileView);
             }
-
-
-            String userID = UserArrayList.get(position).getUserID();
-            holder.itemView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent profileIntent = new Intent(getContext(), UserProfileActivity.class);
-                    profileIntent.putExtra("user_id", userID);
-                    startActivity(profileIntent);
-                }
-            });
-
-
         }
 
         public void setOnClickListener(View.OnClickListener clickListener){
@@ -284,3 +283,4 @@ public class AvailableUsers extends Fragment {
     }
 
 }
+

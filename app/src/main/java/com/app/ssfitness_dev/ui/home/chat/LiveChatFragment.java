@@ -20,11 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.ssfitness_dev.R;
+import com.app.ssfitness_dev.data.models.GroupModel;
 import com.app.ssfitness_dev.data.models.User;
 import com.app.ssfitness_dev.ui.home.chat.FriendsFragment.FriendsViewHolder;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -45,10 +47,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class LiveChatFragment extends Fragment {
 
     private RecyclerView mConvList;
+    private FloatingActionButton create_group_btn;
 
     private DatabaseReference mConvDatabase;
     private DatabaseReference mMessageDatabase;
-    private DatabaseReference mUsersDatabase;
+    private DatabaseReference mUsersDatabase,mGroupDatabase;
     private DatabaseReference mChatUserDatabase;
 
     private FirebaseAuth mAuth;
@@ -56,8 +59,6 @@ public class LiveChatFragment extends Fragment {
     private String mCurrent_user_id;
 
     private View mMainView;
-    private String userName;
-    String list_user_id;
 
     //options for firebase recycler
     FirebaseRecyclerOptions<Conversation> options;
@@ -76,6 +77,11 @@ public class LiveChatFragment extends Fragment {
 
         mMainView = inflater.inflate(R.layout.fragment_live_chat, container, false);
         mConvList = mMainView.findViewById(R.id.conv_list);
+        create_group_btn = mMainView.findViewById(R.id.create_group_btn);
+        create_group_btn.setOnClickListener(view -> {
+            Intent i = new Intent(getContext(),CreateGroupActivity.class);
+            startActivity(i);
+        });
         mAuth = FirebaseAuth.getInstance();
 
         mCurrent_user_id = mAuth.getCurrentUser().getUid();
@@ -84,8 +90,9 @@ public class LiveChatFragment extends Fragment {
         //KEEP SYNCED
         mConvDatabase.keepSynced(true);
         mUsersDatabase = FirebaseDatabase.getInstance().getReference().child("users");
-        mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages")
-                .child(mCurrent_user_id);
+        mGroupDatabase = FirebaseDatabase.getInstance().getReference().child("groups");
+        mGroupDatabase.keepSynced(true);
+        mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(mCurrent_user_id);
         mUsersDatabase.keepSynced(true);
         mChatUserDatabase = FirebaseDatabase.getInstance().getReference().child("chat").child(mCurrent_user_id);
 
@@ -112,41 +119,70 @@ public class LiveChatFragment extends Fragment {
                 = new FirebaseRecyclerAdapter<Conversation, ConversationViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ConversationViewHolder holder, int position, @NonNull Conversation model) {
-                list_user_id = getRef(position).getKey();
+                String current_chat_id = getRef(position).getKey();
 
-                Query lastMessageQuery = mMessageDatabase.child(list_user_id).limitToLast(1);
+                mUsersDatabase.child(current_chat_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        User user = dataSnapshot.getValue(User.class);
+                        if(user!=null){
+                            String userName = user.userName;
+                            String userProfile = user.photoUrl;
+                            holder.setName(userName);
+                            if (userProfile != null) {
+                                holder.setPhoto(userProfile, getContext());
+                            }
+                            if (dataSnapshot.hasChild("online")) {
+                                String userOnline = dataSnapshot.child("online").getValue().toString();
+                                holder.setUserOnline(userOnline);
+                            }
+                            holder.mView.setOnClickListener(v -> {
+                                Intent chatIntent = new Intent(getContext(), UserChatActivity.class);
+                                chatIntent.putExtra("user_name", userName);
+                                chatIntent.putExtra("user_id", current_chat_id);
+                                startActivity(chatIntent);
+                            });
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                mGroupDatabase.child(current_chat_id).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        GroupModel groupModel = dataSnapshot.getValue(GroupModel.class);
+                        if(groupModel!=null){
+                            holder.setName(groupModel.getGroup_name());
+                            if (groupModel.getPhotoUrl() != null) {
+                                holder.setPhoto(groupModel.getPhotoUrl(), getContext());
+                            }
+
+                            holder.mView.setOnClickListener(v -> {
+                                Intent chatIntent = new Intent(getContext(), UserChatActivity.class);
+                                chatIntent.putExtra("user_name", groupModel.getGroup_name());
+                                chatIntent.putExtra("user_id", current_chat_id);
+                                startActivity(chatIntent);
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                Query lastMessageQuery = mMessageDatabase.child(current_chat_id).limitToLast(1);
 
                 lastMessageQuery.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         Messages messages = dataSnapshot.getValue(Messages.class);
                         assert messages != null;
-                        mUsersDatabase.child(list_user_id).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                User user = dataSnapshot.getValue(User.class);
-                                assert user != null;
-                                userName = user.userName;
-                                String userProfile = user.photoUrl;
-                                holder.setName(userName);
-                                if (userProfile != null) {
-                                    holder.setPhoto(userProfile, getContext());
-                                }
-                                if (dataSnapshot.hasChild("online")) {
-                                    String userOnline = dataSnapshot.child("online").getValue().toString();
-                                    holder.setUserOnline(userOnline);
-                                }
-
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-
                         String data = dataSnapshot.child("message").getValue().toString();
 
                         holder.setMessage(data, model.isSeen());
@@ -171,12 +207,6 @@ public class LiveChatFragment extends Fragment {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
-                });
-                holder.mView.setOnClickListener(v -> {
-                    Intent chatIntent = new Intent(getContext(), UserChatActivity.class);
-                    chatIntent.putExtra("user_name", userName);
-                    chatIntent.putExtra("user_id", list_user_id);
-                    startActivity(chatIntent);
                 });
             }
 

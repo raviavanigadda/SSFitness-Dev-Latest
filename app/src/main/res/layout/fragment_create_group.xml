@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.home.chat.CreateGroupFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:context=".CG_GroupNameFragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/cg_name_icon_layout">
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/group_icon_cv"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            app:cardCornerRadius="@dimen/_25sdp"
+            app:strokeColor="@color/colorPrimaryDark"
+            app:strokeWidth="@dimen/_1sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:layout_marginTop="@dimen/_16sdp">
+            <ImageView
+                android:id="@+id/group_icon_img_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_camera"
+                android:layout_gravity="center"/>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="@id/group_name_edit_text"
+            app:layout_constraintEnd_toEndOf="@id/group_name_edit_text"
+            app:layout_constraintTop_toTopOf="@id/group_name_edit_text"
+            android:background="@color/colorPrimaryDark"/>
+        <EditText
+            android:id="@+id/group_name_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/group_icon_cv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/group_icon_cv"
+            app:layout_constraintBottom_toBottomOf="@id/group_icon_cv"
+            android:hint="@string/grop_name_hint"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:background="@android:color/transparent"
+            android:layout_marginStart="@dimen/_16sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp" />
+        <View
+            android:id="@+id/cg_edit_text_bottom_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintStart_toStartOf="@id/group_name_edit_text"
+            app:layout_constraintEnd_toEndOf="@id/group_name_edit_text"
+            app:layout_constraintTop_toBottomOf="@id/group_name_edit_text"
+            android:background="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/cg_edit_text_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/cg_edit_text_err"
+            app:layout_constraintStart_toStartOf="@id/cg_edit_text_bottom_divider"
+            app:layout_constraintEnd_toEndOf="@id/cg_edit_text_bottom_divider"
+            app:layout_constraintTop_toBottomOf="@id/cg_edit_text_bottom_divider"
+            android:textColor="@color/colorRed"
+            android:drawableStart="@drawable/ic_error"
+            android:drawablePadding="@dimen/_4sdp"
+            android:visibility="gone"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="@id/cg_select_text"
+            app:layout_constraintBottom_toBottomOf="@id/cg_select_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/gray"
+            android:alpha="0.5" />
+
+        <TextView
+            android:id="@+id/cg_select_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cg_select_members"
+            android:textColor="@color/colorPrimaryDark"
+            android:padding="@dimen/_4sdp"
+            android:paddingStart="@dimen/_16sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/group_icon_cv"
+            android:layout_marginTop="@dimen/_16sdp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cg_select_friends_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cg_name_icon_layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
