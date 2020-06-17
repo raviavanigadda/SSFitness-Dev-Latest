@@ -13,11 +13,6 @@
             android:title="Nutrition" />
 
         <item
-            android:id="@+id/therapy"
-            android:fontFamily="@font/aktiv_grotesk"
-            android:icon="@drawable/ic_therapy"
-            android:title="Therapy" />
-        <item
             android:id="@+id/progress"
             android:fontFamily="@font/aktiv_grotesk"
             android:icon="@drawable/ic_show_chart_black_24dp"

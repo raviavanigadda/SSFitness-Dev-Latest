@@ -62,6 +62,23 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <belka.us.androidtoggleswitch.widgets.ToggleSwitch
+        android:id="@+id/goal_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="6dp"
+        android:textSize="14sp"
+        app:activeBgColor="@color/colorAccent"
+        app:cornerRadius="8dp"
+        app:inactiveBgColor="@color/lightGrey"
+        app:inactiveTextColor="@color/white"
+        app:separatorColor="@color/white"
+        app:textToggleCenter="Maintenance"
+        app:textToggleLeft="Fat Loss"
+        app:textToggleRight="Mass Gain"
+        app:toggleWidth="117dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
