@@ -115,6 +115,21 @@
                 android:textColor="@color/white"
                 android:padding="@dimen/_16sdp"
                 android:background="@drawable/outline_btn_bg"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:layout_width="match_parent"
+                android:button="@null"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_14sdp"
+                android:fontFamily="@font/work_sans"
+                android:text="Very Intensely Active"
+                android:id="@+id/radio_very_expert"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:layout_marginLeft="@dimen/_16sdp"
+                android:layout_marginRight="@dimen/_16sdp"
+                android:textColor="@color/white"
+                android:padding="@dimen/_16sdp"
+                android:background="@drawable/outline_btn_bg"/>
         </RadioGroup>
 
         <com.google.android.material.button.MaterialButton

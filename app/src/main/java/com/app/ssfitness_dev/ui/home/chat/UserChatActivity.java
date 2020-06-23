@@ -3,6 +3,7 @@ package com.app.ssfitness_dev.ui.home.chat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -82,9 +83,13 @@ public class UserChatActivity extends AppCompatActivity {
     private int itemPos = 0;
     private String mLastKey = "";
     private String mPrevKey = "";
+    private int prevListsize = 0;
+
+    // Required variables for group chat
     private boolean isGroup = false;
     private ArrayList<String> group_users;
     private ArrayList<User> grp_user_data_list;
+    private boolean msg_deleted = false, child_added = false;
 
 
     @Override
@@ -112,7 +117,7 @@ public class UserChatActivity extends AppCompatActivity {
         mMessagesList.setHasFixedSize(true);
         mMessagesList.setLayoutManager(mLinearLayout);
 
-        mAdapter = new MessageAdapter(messagesList);
+        mAdapter = new MessageAdapter(messagesList,this,mChatUser);
         mMessagesList.setAdapter(mAdapter);
         mMessagesList.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -129,10 +134,6 @@ public class UserChatActivity extends AppCompatActivity {
                 }
             }
         });
-
-        //Load Messages
-        //loadMessages();
-
 
         setSupportActionBar(mChatToolbar);
 
@@ -249,21 +250,6 @@ public class UserChatActivity extends AppCompatActivity {
         });
 
 
-
-        /*mRootRef.child("users").child(mChatUser).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                //String chat_user_name = dataSnapshot.child("userName").getValue().toString();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
-
         /*mChatAdd.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -285,18 +271,18 @@ public class UserChatActivity extends AppCompatActivity {
         });
 
         //////REFRESH LAYOUT
-        /*mSwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mCurrentPage++;
 
-               // messagesList.clear();
+                // messagesList.clear();
 
                 itemPos = 0;
-
-                //loadMoreMessages();
+                prevListsize = messagesList.size();
+                loadMoreMessages();
             }
-        });*/
+        });
 
     }
 
@@ -312,13 +298,26 @@ public class UserChatActivity extends AppCompatActivity {
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
                 Messages messages = dataSnapshot.getValue(Messages.class);
+                messages.setMessageId(dataSnapshot.getKey());
+                if (isGroup){
+                    for (User user : grp_user_data_list){
+                        if(user.userID.equals(messages.getFrom())){
+                            messages.setUserName(user.userName);
+                        }
+                    }
+                }
+
                 String messageKey = dataSnapshot.getKey();
                 //messagesList.add(itemPos++,messages);
 
                 //Removes repeated message
                 if (!mPrevKey.equals(messageKey)) {
-                    messagesList.add(itemPos++, messages);
-
+                    if(msg_deleted) {
+                        msg_deleted = false;
+                    }
+                    else {
+                        messagesList.add(itemPos++,messages);
+                    }
                 } else {
                     mPrevKey = mLastKey;
                 }
@@ -331,7 +330,8 @@ public class UserChatActivity extends AppCompatActivity {
 
                 mSwipeRefreshLayout.setRefreshing(false);
 
-                mLinearLayout.scrollToPositionWithOffset(10, 0);
+                //mLinearLayout.scrollToPositionWithOffset(10, 0);
+                mMessagesList.scrollToPosition(messagesList.size()-prevListsize);
 
             }
 
@@ -342,7 +342,13 @@ public class UserChatActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                if(child_added){
+                    child_added = false;
+                    msg_deleted = false;
+                }
+                else {
+                    msg_deleted = true;
+                }
             }
 
             @Override
@@ -374,13 +380,13 @@ public class UserChatActivity extends AppCompatActivity {
                 //Once we get all messages we receive it as data snapshow
 
                 Messages messages = dataSnapshot.getValue(Messages.class);
+                messages.setMessageId(dataSnapshot.getKey());
                 if (isGroup){
                     for (User user : grp_user_data_list){
                         if(user.userID.equals(messages.getFrom())){
                             messages.setUserName(user.userName);
                         }
                     }
-                    //messages.setUserName(grp_user_data_list.get(index).userName);
                 }
                 /*-- This Code was OutSide --*/
                 //add new message id to db
@@ -392,7 +398,12 @@ public class UserChatActivity extends AppCompatActivity {
                     mLastKey = messageKey;
                     mPrevKey = messageKey;
                 }
-                messagesList.add(messages);
+                if(msg_deleted) {
+                    msg_deleted = false;
+                }
+                else {
+                    messagesList.add(messages);
+                }
 
                 mAdapter.notifyDataSetChanged();
                 //bottom of recycler view
@@ -409,7 +420,13 @@ public class UserChatActivity extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                if(child_added){
+                    child_added = false;
+                    msg_deleted = false;
+                }
+                else {
+                    msg_deleted = true;
+                }
             }
 
             @Override
@@ -426,6 +443,7 @@ public class UserChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
+        child_added = true;
         String message = mChatMessage.getText().toString().trim();
 
         if (!TextUtils.isEmpty(message)) {

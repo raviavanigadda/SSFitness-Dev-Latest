@@ -1,10 +1,10 @@
 package com.app.ssfitness_dev.ui.user.userprofile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.ssfitness_dev.R;
 import com.app.ssfitness_dev.ui.authentication.login.LoginActivity;

@@ -104,6 +104,8 @@ public class LiveChatFragment extends Fragment {
         mConvList.setHasFixedSize(true);
         mConvList.setLayoutManager(linearLayoutManager);
 
+
+
         return mMainView;
 
     }
@@ -224,18 +226,19 @@ public class LiveChatFragment extends Fragment {
         mConvList.setAdapter(firebaseRecyclerAdapter);
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (getFragmentManager() != null) {
-
-            getFragmentManager()
-                    .beginTransaction()
-                    .detach(this)
-                    .attach(this)
-                    .commit();
-        }
-    }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if (getFragmentManager() != null) {
+//
+//            getFragmentManager()
+//                    .beginTransaction()
+//                    .detach(this)
+//                    .attach(this)
+//                    .commit();
+//
+//        }
+//    }
 
 }
 

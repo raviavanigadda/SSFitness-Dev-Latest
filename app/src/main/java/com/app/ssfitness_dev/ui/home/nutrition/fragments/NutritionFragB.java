@@ -1,15 +1,15 @@
 package com.app.ssfitness_dev.ui.home.nutrition.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.app.ssfitness_dev.R;
 import com.github.mikephil.charting.animation.Easing;
@@ -26,9 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import belka.us.androidtoggleswitch.widgets.ToggleSwitch;
 
 
 public class NutritionFragB extends Fragment {
@@ -40,16 +37,15 @@ public class NutritionFragB extends Fragment {
     int age;
     String current_user;
     String goal;
-    String intensity;
-    String days;
-    int tdee = 0;
-    int cals = 0;
-    double wt = 0;
-    int protein = 0;
-    int carbs = 0;
-    int fats = 0;
-    int bmr = 0;
-    double weightz;
+    String ActivityLevel;
+    String diet_preference;
+    int CURRENT_TDEE = 0,GOAL_TDEE = 0;
+    double BMR = 0;
+    int [] PCF_Cal_Array = new int[3], PCF_Gram_Array = new int[3];
+    String [] PCF_Label = {"Protein","Carbs","Fat"};
+
+    private TextView current_tdee_value_txt, required_tdee_value_txt,protein_txt,carb_txt,fat_txt;
+    private PieChart pieChart;
 
 
     public NutritionFragB() {
@@ -61,7 +57,6 @@ public class NutritionFragB extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        mUserDatabase = FirebaseDatabase.getInstance().getReference().child("users");
         return inflater.inflate(R.layout.fragment_nutrition_frag_b, container, false);
     }
 
@@ -72,6 +67,13 @@ public class NutritionFragB extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        current_tdee_value_txt = view.findViewById(R.id.current_tdee_value_txt);
+        required_tdee_value_txt = view.findViewById(R.id.required_tdee_value_txt);
+        pieChart = view.findViewById(R.id.pieChart);
+        protein_txt = view.findViewById(R.id.protein_txt);
+        carb_txt = view.findViewById(R.id.carb_txt);
+        fat_txt = view.findViewById(R.id.fat_txt);
 
         current_user = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -88,21 +90,30 @@ public class NutritionFragB extends Fragment {
                     gender = dataSnapshot.child("gender").getValue(String.class);
                     weight = dataSnapshot.child("weight").getValue(Long.class);
                     height = dataSnapshot.child("height").getValue(Long.class);
-                   // age = dataSnapshot.child("age").getValue().toString();
-                    age = 25;
-                    goal = dataSnapshot.child("goal").getValue(String.class);
-                    intensity = dataSnapshot.child("activitylevel").getValue(String.class);
 
+                    age = dataSnapshot.child("age").getValue(int.class);
+                    goal = dataSnapshot.child("goal").getValue(String.class);
+                    ActivityLevel = dataSnapshot.child("activitylevel").getValue(String.class);
+                    diet_preference = dataSnapshot.child("diet").getValue(String.class);
                     //For male and femlae BMR
                     if(gender.equals("female")){
-                        bmr = BMRcalcKG(age, height, weight, false);
-                        weightz = weight;
+                        BMR = BMRcalcKG(age, height, weight, false);
                     }
                     else
                     {
-                        bmr = BMRcalcKG(age, height, weight, true);
-                        weightz = weight;
+                        BMR = BMRcalcKG(age, height, weight, true);
                     }
+                    CURRENT_TDEE = CalcTDEE(BMR,ActivityLevel);
+                    GOAL_TDEE = CalcGoalTDEE(CURRENT_TDEE,goal);
+                    PCF_Cal_Array = CalcPCF(GOAL_TDEE,diet_preference);
+                    PCF_Gram_Array = CalcGramPCF(PCF_Cal_Array);
+
+                    current_tdee_value_txt.setText(CURRENT_TDEE+" Cal");
+                    required_tdee_value_txt.setText(GOAL_TDEE+" Cal");
+                    protein_txt.setText("Protein: "+PCF_Cal_Array[0]+" Cal / "+PCF_Gram_Array[0]+"g");
+                    carb_txt.setText("Carbs: "+PCF_Cal_Array[1]+" Cal / "+PCF_Gram_Array[1]+"g");
+                    fat_txt.setText("Fat: "+PCF_Cal_Array[2]+" Cal / "+PCF_Gram_Array[2]+"g");
+                    setUpPieChart();
                     //bind ui
                 }
 
@@ -113,155 +124,139 @@ public class NutritionFragB extends Fragment {
 
             }
         });
+    }
 
+    private void setUpPieChart(){
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(true);
+        pieChart.getLegend().setEnabled(false);
+        pieChart.setDragDecelerationFrictionCoef(0.9f);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.WHITE);
+        pieChart.setHoleRadius(35f);
+        pieChart.setTransparentCircleRadius(45f);
+        pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic);
+        
+        ArrayList<PieEntry> entries = new ArrayList<>();
+        for (int i=0;i<PCF_Cal_Array.length;i++){
+            entries.add(new PieEntry(PCF_Cal_Array[i],PCF_Label[i]));
+        }
 
-        final TextView tdd = getView().findViewById(R.id.tdee);
-        final TextView p = getView().findViewById(R.id.cal_protein);
-        final TextView c = getView().findViewById(R.id.cal_carb);
-        final TextView f = getView().findViewById(R.id.cal_fat);
-        final TextView gp = getView().findViewById(R.id.gram_protein);
-        final TextView gc = getView().findViewById(R.id.gram_carb);
-        final TextView gf = getView().findViewById(R.id.gram_fat);
-        final PieChart pie = getView().findViewById(R.id.chart);
-        TextView td = getView().findViewById(R.id.tdee2);
+        PieDataSet pieDataSet = new PieDataSet(entries,"");
+        pieDataSet.setSliceSpace(3f);
+        pieDataSet.setSelectionShift(5f);
+        pieDataSet.setColors(getResources().getColor(R.color.bluez), getResources().getColor(R.color.greenz), getResources().getColor(R.color.red));
+        pieDataSet.setValueFormatter(new PercentFormatter());
 
-        //Store in strings
+        PieData pieData = new PieData(pieDataSet);
+        pieData.setValueTextSize(14f);
+        pieData.setValueTextColor(Color.WHITE);
+        pieChart.setData(pieData);
+        pieChart.invalidate();
+    }
 
-        tdee = tdeeTest(bmr, 2, 3, 7);
+    private int CalcTDEE(double BMR,String ActivityLevel){
+        int TDEE = 0;
+        switch (ActivityLevel){
+            case "Not so much":
+                TDEE = (int) (BMR * 1.2);
+                break;
+            case "Weekend Warrior":
+                TDEE = (int) (BMR * 1.375);
+                break;
+            case "Moderately Active":
+                TDEE = (int) (BMR * 1.55);
+                break;
+            case "Intensely Active":
+                TDEE = (int) (BMR * 1.725);
+                break;
+            case "Very Intensely Active":
+                TDEE = (int) (BMR * 1.9);
+                break;
+        }
+        return TDEE;
+    }
 
-        ToggleSwitch ts = getView().findViewById(R.id.goal_switch);
-        td.setText(String.valueOf(tdee));
-        ts.setCheckedTogglePosition(1);
-        tdd.setText(String.valueOf(tdee));
+    private int CalcGoalTDEE(int CURRENT_TDEE,String goal){
+        int GOAL_TDEE = 0;
+        switch (goal){
+            case "Lose Weight":
+                GOAL_TDEE = (int) (CURRENT_TDEE - CURRENT_TDEE*0.15);
+                break;
+            case "Maintain Weight":
+                GOAL_TDEE = CURRENT_TDEE;
+                break;
+            case "Increase Lean Body Mass":
+                GOAL_TDEE = (int) (CURRENT_TDEE + CURRENT_TDEE*0.05);
+                break;
+            case "Postpartum Recovery":
+                GOAL_TDEE = CURRENT_TDEE;
+                break;
+        }
+        return GOAL_TDEE;
+    }
 
-        cals = tdee;
+    private int[] CalcPCF(int GOAL_TDEE,String diet_preference){
+        int [] PCFArray = new int[3];
+        switch (diet_preference){
+            case "Ultra low fat / low protein":
+                PCFArray[0] = (int) (GOAL_TDEE * 0.15);
+                PCFArray[1] = (int) (GOAL_TDEE * 0.75);
+                PCFArray[2] = (int) (GOAL_TDEE * 0.10);
+                break;
+            case "Classic Ketogenic":
+                PCFArray[0] = (int) (GOAL_TDEE * 0.15);
+                PCFArray[1] = (int) (GOAL_TDEE * 0.10);
+                PCFArray[2] = (int) (GOAL_TDEE * 0.75);
+                break;
+            case "Performance Ketogenic":
+                PCFArray[0] = (int) (GOAL_TDEE * 0.30);
+                PCFArray[1] = (int) (GOAL_TDEE * 0.10);
+                PCFArray[2] = (int) (GOAL_TDEE * 0.60);
+                break;
+            case "Moderate carb / high protein / low fat":
+                PCFArray[0] = (int) (GOAL_TDEE * 0.40);
+                PCFArray[1] = (int) (GOAL_TDEE * 0.40);
+                PCFArray[2] = (int) (GOAL_TDEE * 0.20);
+                break;
+            case "High carbohydrate / modern protein":
+                PCFArray[0] = (int) (GOAL_TDEE * 0.25);
+                PCFArray[1] = (int) (GOAL_TDEE * 0.55);
+                PCFArray[2] = (int) (GOAL_TDEE * 0.20);
+                break;
+            case "Balanced":
+                PCFArray[0] = (int) (GOAL_TDEE * 0.30);
+                PCFArray[1] = (int) (GOAL_TDEE * 0.35);
+                PCFArray[2] = (int) (GOAL_TDEE * 0.35);
+                break;
+        }
+        return PCFArray;
+    }
 
-        List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry((int) (wt * 1.8), "Protein"));
-        entries.add(new PieEntry((int) (cals - cals * 0.3 - wt * 1.8 * 4) / 4, "Carb"));
-        entries.add(new PieEntry((int) (cals * 0.3 / 9), "Fat"));
+    private int[] CalcGramPCF(int[] PCF_Cal_Array){
+        int[] PCF_Gram_Array = new int[3];
 
-        PieDataSet set = new PieDataSet(entries, null);
+        PCF_Gram_Array[0] = PCF_Cal_Array[0]/4;
+        PCF_Gram_Array[1] = PCF_Cal_Array[1]/4;
+        PCF_Gram_Array[2] = PCF_Cal_Array[2]/9;
 
-        set.setColors(getResources().getColor(R.color.bluez), getResources().getColor(R.color.greenz), getResources().getColor(R.color.red));
-        set.setSliceSpace(3f);
-        set.setSelectionShift(9f);
-        set.setValueFormatter(new PercentFormatter());
-
-        PieData data = new PieData(set);
-
-        pie.getDescription().setEnabled(false);
-        pie.getLegend().setEnabled(false);
-        pie.setUsePercentValues(true);
-        pie.setHoleColor(getResources().getColor(R.color.colorGrey));
-        pie.setHoleRadius(35f);
-        pie.setData(data);
-        pie.spin(500, 0, -360f, Easing.EasingOption.EaseInOutQuad);
-
-        p.setText(String.valueOf(((int) (wt * 1.8 * 4))));
-        f.setText(String.valueOf(((int) (cals * 0.3))));
-        c.setText(String.valueOf(cals - ((int) (wt * 1.8 * 4)) - ((int) (cals * 0.3))));
-        gp.setText(String.valueOf(((int) (wt * 1.8))));
-        gf.setText(String.valueOf(((int) (cals * 0.3 / 9))));
-        gc.setText(String.valueOf((int) (cals - (wt * 1.8 * 4) - (cals * 0.3)) / 4));
-
-
-        ts.setOnToggleSwitchChangeListener(new ToggleSwitch.OnToggleSwitchChangeListener() {
-            @Override
-            public void onToggleSwitchChangeListener(int position, boolean isChecked) {
-                switch (position) {
-                    case 0:
-                        cals = tdee - 250;
-                        protein = ((int) (wt * 2.1 * 4));
-                        fats = ((int) (wt * 9));
-
-                        break;
-                    case 2:
-                        cals = tdee + 200;
-                        protein = ((int) (wt * 1.8 * 4));
-                        fats = ((int) (cals * 0.25));
-                        break;
-                    default:
-                        cals = tdee;
-                        protein = ((int) (wt * 1.8 * 4));
-                        fats = ((int) (cals * 0.3));
-                        break;
-                }
-               //goal = cals;
-                carbs = cals - protein - fats;
-                tdd.setText(String.valueOf(cals));
-                p.setText(String.valueOf(protein));
-                f.setText(String.valueOf(fats));
-                c.setText(String.valueOf(carbs));
-                gp.setText(String.valueOf(protein / 4));
-                gf.setText(String.valueOf(fats / 9));
-                gc.setText(String.valueOf(carbs / 4));
-                List<PieEntry> entries = new ArrayList<>();
-                entries.add(new PieEntry(protein / 4, "Protein"));
-                entries.add(new PieEntry(carbs / 4, "Carb"));
-                entries.add(new PieEntry(fats / 9, "Fat"));
-                PieDataSet set = new PieDataSet(entries, null);
-                set.setColors(getResources().getColor(R.color.bluez), getResources().getColor(R.color.greenz), getResources().getColor(R.color.red));
-                set.setSliceSpace(3f);
-                set.setSelectionShift(9f);
-                set.setValueFormatter(new PercentFormatter());
-                PieData data = new PieData(set);
-                pie.getDescription().setEnabled(false);
-                pie.getLegend().setEnabled(false);
-                pie.setUsePercentValues(true);
-                pie.setHoleColor(getResources().getColor(R.color.colorGrey));
-                pie.setHoleRadius(35f);
-                pie.setData(data);
-                pie.notifyDataSetChanged();
-                pie.invalidate();
-            }
-        });
+        return PCF_Gram_Array;
     }
 
 
-    private int tdeeTest(int bmr, int activ, int intense, int seeki) {
-        double active2, intense2, seeki2;
-        switch (activ) {
-            case 0:
-                active2 = 1.2;
-                break;
-            case 1:
-                active2 = 1.3;
-                break;
-            default:
-                active2 = 1.75;
-                break;
-        }
-        switch (intense) {
-            case 0:
-                intense2 = active2 + 0.05;
-                break;
-            case 1:
-                intense2 = active2 + 0.1;
-                break;
-            default:
-                intense2 = active2 + 0.15;
-                break;
-        }
-        seeki2 = seeki * 0.01 + intense2;
-
-        return ((int) (bmr * seeki2));
-    }
-
-
-    public int BMRcalcKG(int age, long height, double weight, boolean gender) {
+    public double BMRcalcKG(int age, long height, double weight, boolean gender) {
         if (gender) {
-            return (int) ((10 * weight) + (6.25 * height) - (5 * age) + 5);
+            return (double) ((10 * weight) + (6.25 * height) - (5 * age) + 5);
         } else {
-            return (int) ((10 * weight) + (6.25 * height) - (5 * age) - 161);
+            return (double) ((10 * weight) + (6.25 * height) - (5 * age) - 161);
         }
     }
 
-    public int BMRcalcLB(int age, int height, int weight, boolean gender) {
+    public long BMRcalcLB(int age, int height, int weight, boolean gender) {
         if (gender) {
-            return (int) ((10 * weight / 2.2) + (6.25 * height * 2.54) - (5 * age) + 5);
+            return (long) ((10 * weight / 2.2) + (6.25 * height * 2.54) - (5 * age) + 5);
         } else {
-            return (int) ((10 * weight / 2.2) + (6.25 * height * 2.54) - (5 * age) - 161);
+            return (long) ((10 * weight / 2.2) + (6.25 * height * 2.54) - (5 * age) - 161);
         }
     }
 

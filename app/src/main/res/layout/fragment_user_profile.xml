@@ -116,6 +116,46 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_layout_age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:singleLine="true"
+            app:boxCornerRadiusBottomEnd="@dimen/_16sdp"
+            app:boxCornerRadiusTopStart="@dimen/_16sdp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:textColorHint="@color/gray"
+            android:hint="Age"
+            app:counterEnabled="true"
+            android:layout_marginEnd="@dimen/_4sdp"
+            app:counterMaxLength="2"
+            app:counterTextColor="@color/gray"
+            app:helperText="Enter your age"
+            app:helperTextTextColor="@color/gray"
+            app:endIconMode="clear_text"
+            app:endIconTint="@color/gray"
+            app:errorEnabled="true"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginLeft="@dimen/_4sdp"
+            android:layout_marginRight="@dimen/_4sdp"
+            android:layout_below="@id/text_layout_last_name"
+            android:layout_toRightOf="@id/profile_image">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:singleLine="true"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:id="@+id/text_input_age"
+                android:background="@drawable/bottom_border"
+                android:inputType="number"
+                android:maxLength="2"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_width="wrap_content"
@@ -123,7 +163,7 @@
             android:text="Male"
             android:layout_marginStart="@dimen/_64sdp"
             android:background="@color/transparent"
-            android:layout_below="@id/text_layout_last_name"
+            android:layout_below="@id/text_layout_age"
             android:drawableLeft="@drawable/ic_male"
             android:id="@+id/btn_male"/>
 
@@ -135,7 +175,7 @@
             android:layout_marginLeft="@dimen/_4sdp"
             app:rippleColor="@color/colorPrimary"
             android:background="@color/transparent"
-            android:layout_below="@id/text_layout_last_name"
+            android:layout_below="@id/text_layout_age"
             android:drawableLeft="@drawable/ic_female"
             android:id="@+id/btn_female"
             android:layout_toRightOf="@id/btn_male"/>

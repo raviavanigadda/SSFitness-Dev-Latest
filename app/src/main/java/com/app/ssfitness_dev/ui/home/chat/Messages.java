@@ -5,7 +5,15 @@ public class Messages {
     private String message, type, from;
     private long time;
     private boolean seen;
-    private String UserName;
+    private String UserName,messageId;
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
 
     public Messages(String from) {
         this.from = from;

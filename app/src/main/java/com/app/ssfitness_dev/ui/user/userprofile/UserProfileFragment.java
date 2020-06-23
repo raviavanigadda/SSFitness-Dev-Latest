@@ -1,6 +1,5 @@
 package com.app.ssfitness_dev.ui.user.userprofile;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -9,14 +8,6 @@ import android.net.Uri;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -25,8 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -34,40 +23,35 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
 import com.app.ssfitness_dev.R;
-import com.app.ssfitness_dev.ui.home.HomeActivity;
-import com.app.ssfitness_dev.ui.splash.SplashActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.firebase.storage.UploadTask.TaskSnapshot;
 import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageActivity;
-
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -98,7 +82,7 @@ public class UserProfileFragment extends Fragment {
     private CollectionReference usersRef;
     private Button maleBtn, femaleBtn;
     private MaterialDatePicker materialDatePicker;
-    private EditText firstName, lastName;
+    private EditText firstName, lastName, age;
     private Uri resultUri;
     private ImageView mProfileImage;
     private MaterialToolbar materialToolbar;
@@ -151,6 +135,9 @@ public class UserProfileFragment extends Fragment {
                 else if(TextUtils.isEmpty(lastName.getText().toString())){
                     lastName.setError("Enter your last name");
                 }
+                else if(TextUtils.isEmpty(age.getText().toString().trim())){
+                    age.setError("Enter your age");
+                }
                 else if(gender.equals("")){
                     makeSnackBarMessage(userRelativeLayout,"Please select your gender");
                 }
@@ -184,11 +171,13 @@ public class UserProfileFragment extends Fragment {
 
                     String userFirstName = firstName.getText().toString().trim().substring(0,1).toUpperCase()+firstName.getText().toString().trim().substring(1).toLowerCase();
                     String userLastName = lastName.getText().toString().trim().substring(0,1).toUpperCase()+lastName.getText().toString().trim().substring(1).toLowerCase();
+                    int userAge = Integer.parseInt(age.getText().toString().trim());
                     name = userFirstName+" "+userLastName;
                     country = countryAutoCompleteDropText.getText().toString();
                     bmi = weight*10000/(height*height);
 
                     user.put("userName",name);
+                    user.put("age",userAge);
                     user.put("gender",gender);
                     user.put("dateofbirth",dob);
                     user.put("country",country);
@@ -657,6 +646,7 @@ public class UserProfileFragment extends Fragment {
 
         firstName = view.findViewById(R.id.text_input_first_name);
         lastName = view.findViewById(R.id.text_input_last_name);
+        age = view.findViewById(R.id.text_input_age);
         maleBtn = view.findViewById(R.id.btn_male);
         femaleBtn = view.findViewById(R.id.btn_female);
         mProfileImage = view.findViewById(R.id.profile_image);

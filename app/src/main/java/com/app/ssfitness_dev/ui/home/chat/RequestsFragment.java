@@ -71,10 +71,10 @@ public class RequestsFragment extends Fragment {
         mCurrentUserId = mAuth.getCurrentUser().getUid();
 
         mNotificationsDatabase = FirebaseDatabase.getInstance().getReference().child("notifications").child(mCurrentUserId);
-        mNotificationsDatabase.keepSynced(true);
+        //mNotificationsDatabase.keepSynced(true);
 
         mSentFriendRequestDatabase = FirebaseDatabase.getInstance().getReference().child("friend_requests").child(mCurrentUserId);
-        mSentFriendRequestDatabase.keepSynced(true);
+        //mSentFriendRequestDatabase.keepSynced(true);
 
         mUserReference = FirebaseDatabase.getInstance().getReference().child("users");
 
@@ -115,7 +115,6 @@ public class RequestsFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         User user = dataSnapshot.getValue(User.class);
-                        assert user != null;
                         holder.request_user_name.setText(user.userName);
                         holder.view_request_btn.setOnClickListener(new View.OnClickListener() {
                             @Override

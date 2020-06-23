@@ -1,6 +1,12 @@
 package com.app.ssfitness_dev.ui.user.userprofile;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,23 +15,10 @@ import androidx.navigation.NavArgument;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
-
 import com.app.ssfitness_dev.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -48,7 +41,7 @@ public class DietFragment extends Fragment {
     private CollectionReference usersRef;
     private NavController navController;
     private RadioGroup radioGroup;
-    private RadioButton radioButton1, radioButton2, radioButton3, radioButton4;
+    private RadioButton radioButton1, radioButton2, radioButton3, radioButton4,radioButton5,radioButton6;
     private String answer;
     private NavArgument argument;
 
@@ -109,10 +102,13 @@ public class DietFragment extends Fragment {
         radioGroup = getView().findViewById(R.id.radio_group_diet);
 
 
-        radioButton1 = getView().findViewById(R.id.radio_no_preference);
-        radioButton2 = getView().findViewById(R.id.radio_vegetarian);
-        radioButton3 = getView().findViewById(R.id.radio_vegan);
-        radioButton4 = getView().findViewById(R.id.radio_nonveg);
+        radioButton1 = getView().findViewById(R.id.radio_ultra_low);
+        radioButton2 = getView().findViewById(R.id.radio_classic_ketogenic);
+        radioButton3 = getView().findViewById(R.id.radio_performance_ketogenic);
+        radioButton4 = getView().findViewById(R.id.radio_moderate);
+        radioButton5 = getView().findViewById(R.id.radio_high_carb);
+        radioButton6 = getView().findViewById(R.id.radio_balanced);
+
 
         materialToolbar = view.findViewById(R.id.topAppBar);
 
@@ -156,6 +152,24 @@ public class DietFragment extends Fragment {
             else
             {
                 radioButton4.setBackgroundResource(R.drawable.outline_btn_bg);
+            }
+
+            if(radioButton5.isChecked()){
+                radioButton5.setBackgroundResource(R.drawable.primary_bg);
+                answer = radioButton5.getText().toString();
+            }
+            else
+            {
+                radioButton5.setBackgroundResource(R.drawable.outline_btn_bg);
+            }
+
+            if(radioButton6.isChecked()){
+                radioButton6.setBackgroundResource(R.drawable.primary_bg);
+                answer = radioButton6.getText().toString();
+            }
+            else
+            {
+                radioButton6.setBackgroundResource(R.drawable.outline_btn_bg);
             }
         });
     }

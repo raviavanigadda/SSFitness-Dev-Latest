@@ -3,26 +3,19 @@ package com.app.ssfitness_dev.ui.user.userprofile;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.app.ssfitness_dev.R;
 import com.app.ssfitness_dev.ui.home.HomeActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import nl.dionsegijn.konfetti.KonfettiView;
-
-import static com.app.ssfitness_dev.utilities.Constants.USERS;
 
 /**
  * A simple {@link Fragment} subclass.
